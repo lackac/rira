@@ -7,11 +7,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = "rira"
-    s.summary = %Q{Nice interface for Jira, the Ruby way.}
+    s.summary = "Nice interface for Jira, the Ruby way."
     s.email = "lackac@lackac.hu"
     s.homepage = "http://github.com/lackac/rira"
-    s.description = "TODO"
-    s.authors = ["Laszlo Bacsi"]
+    s.description = "Nice interface for Jira, the Ruby way."
+    s.authors = ["László Bácsi"]
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

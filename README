@@ -1,9 +1,9 @@
-rira
+Rira
 ====
 
-Description goes here.
+Rira is a ruby gem for interfacing Jira. Check out the Jira documentation for the {origin of the name}[http://confluence.atlassian.com/pages/viewpage.action?pageId=192544].
 
 COPYRIGHT
 =========
 
-Copyright (c) 2008 Laszlo Bacsi. See LICENSE for details.
+Copyright (c) 2008 László Bácsi. See LICENSE for details.
