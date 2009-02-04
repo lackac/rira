@@ -1,6 +1,9 @@
 require 'xmlrpc/client'
 require 'ostruct'
 
+require File.join(File.dirname(__FILE__), 'rira', 'model')
+require File.join(File.dirname(__FILE__), 'rira', 'base')
+
 def Rira(url)
   unless url =~ %r{/rpc/xmlrpc$}
     url += '/' unless url[-1] == ?/
@@ -23,37 +26,6 @@ module Rira
 
     def login(username, password)
       Rira::Base.new(@url, username, password)
-    end
-  end
-
-  class Base
-    MAPPINGS = {
-      :get_projects => 'getProjectsNoSchemes'
-    }
-
-    def initialize(url, username, password, options = {})
-      @url, @username, @password = url, username, password
-      @token = xmlrpc_client.call("jira1.login", @username, @password)
-    rescue XMLRPC::FaultException => e
-      raise RPCError.new(e)
-    end
-
-    def method_missing(method, *args)
-      method = MAPPINGS[method] || method.to_s.gsub(/_(.)/) {$1.upcase}
-      case result = xmlrpc_client.call("jira1.#{method}", @token, *args)
-      when Hash
-        OpenStruct.new(result)
-      when Array
-        result.map {|item| item.is_a?(Hash) ? OpenStruct.new(item) : item}
-      else
-        result
-      end
-    rescue XMLRPC::FaultException => e
-      raise RPCError.new(e)
-    end
-
-    def xmlrpc_client
-      XMLRPC::Client.new2(@url)
     end
   end
 end
