@@ -40,11 +40,12 @@ module Rira
 
     def method_missing(method, *args)
       model, *methods = MAPPINGS[method]
-      
+
       super(method, *args) if methods.empty?
 
+      retried = false
       begin
-        case result = xmlrpc_client.call("jira1.#{methods.shift}", @token, *args)
+        case result = xmlrpc_client.call("jira1.#{methods.first}", @token, *args)
         when Hash
           model_or_struct(model, result)
         when Array
@@ -59,8 +60,15 @@ module Rira
           result
         end
       rescue XMLRPC::FaultException => e
-        retry unless methods.empty?
-        raise RPCError.new(e)
+        if e.faultString =~ /session timed out/ and not retried
+          @token = xmlrpc_client.call("jira1.login", @username, @password)
+          retried = true
+          retry
+        else
+          methods.shift
+          retry unless methods.empty?
+          raise RPCError.new(e)
+        end
       end
     end
 
